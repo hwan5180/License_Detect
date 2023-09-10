@@ -72,6 +72,12 @@ func NewResolver(options ...ClientOption) (*Resolver, error) {
 		}
 	}
 
+	func SelectIPTraffic(t IPType) ClientOption {
+		return func(o *clientOpts) {
+			o.listenOn = t
+		}
+	}
+
 	c, err := newClient(conf)
 	if err != nil {
 		return nil, err
@@ -79,6 +85,12 @@ func NewResolver(options ...ClientOption) (*Resolver, error) {
 	return &Resolver{
 		c: c,
 	}, nil
+}
+
+func SelectIPTraffic(t IPType) ClientOption {
+	return func(o *clientOpts) {
+		o.listenOn = t
+	}
 }
 
 // Browse for all services of a given type in a given domain.
@@ -130,6 +142,7 @@ func (r *Resolver) Lookup(ctx context.Context, instance, service, domain string,
 			cancel()
 		}
 	}()
+// Lookup a specific service by its name and type in a given domain.
 
 	return nil
 }
